@@ -8,6 +8,7 @@ import About from './components/About.jsx'
 import Menu from './components/Menu.jsx'
 import Contact from './components/Contact.jsx'
 
+
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
 const App = () => {
