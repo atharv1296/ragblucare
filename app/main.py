@@ -289,6 +289,156 @@ async def _stream_diagnosis(
 
 
 # ═══════════════════════════════════════════════════════════
+# POST /analyse-report  — OCR-extracted text → RAG + LLM analysis
+# ═══════════════════════════════════════════════════════════
+
+REPORT_ANALYSIS_SYSTEM_PROMPT = """\
+You are BluCare 💙, an expert medical report analyst.
+A patient has uploaded a medical report (lab test, blood work, imaging, prescription, etc.).
+The text below was extracted via OCR and may have minor errors — infer meaning from context.
+
+STRICT RULES:
+1. Identify WHAT TYPE of report this is (blood test, urine test, X-ray, prescription, etc.).
+2. List ALL detected parameters/values and whether each is NORMAL, LOW, or HIGH.
+3. Highlight any ABNORMAL or CRITICAL values with ⚠️.
+4. Explain what the abnormal values COULD indicate in simple, patient-friendly language.
+5. Suggest possible conditions that match the pattern of abnormalities.
+6. Recommend next steps (further tests, specialist consultation, lifestyle changes).
+7. Use warm, empathetic language with emojis. The patient may be anxious.
+8. NEVER claim a confirmed diagnosis — always say "This could suggest…" or "Worth discussing with your doctor…"
+9. End with a clear medical disclaimer.
+10. If the text doesn't look like a medical report, politely say so and ask them to upload a valid report."""
+
+REPORT_ANALYSIS_PROMPT = """\
+{system_prompt}
+
+=== PATIENT CONTEXT ===
+Name: {name}  |  Age: {age}  |  Gender: {gender}  |  Region: {country}
+
+=== MEDICAL KNOWLEDGE FROM DATABASE ===
+{rag_context}
+
+=== OCR-EXTRACTED REPORT TEXT ===
+{report_text}
+
+=== INSTRUCTIONS ===
+Provide a comprehensive yet easy-to-understand analysis using this structure:
+
+📋 **Report Type**: [Identify the type of report]
+
+---
+
+📊 **Parameters Found**:
+List each parameter, its value, reference range (if known), and status (Normal ✅ / Abnormal ⚠️).
+
+---
+
+🔍 **Key Findings**:
+Summarize what stands out — abnormal values, patterns, concerns.
+
+---
+
+💡 **What This Could Mean**:
+Explain in simple terms what the abnormal values might indicate.
+Reference the medical knowledge base where relevant.
+
+---
+
+🩺 **Recommended Next Steps**:
+- Further tests to consider
+- Specialists to consult
+- Lifestyle adjustments
+
+---
+
+⚕️ **Disclaimer**: This AI analysis is for informational purposes only.
+Always consult a qualified healthcare provider for proper interpretation
+and treatment decisions. 💙"""
+
+
+@app.post("/analyse-report")
+async def analyse_report(request: Request):
+    """Analyse OCR-extracted medical report text using RAG + LLM."""
+    if not llm_client or not retriever:
+        raise HTTPException(503, "Service not ready")
+
+    try:
+        body = await request.json()
+        report_text = body.get("report_text", "").strip()
+        user_id = body.get("user_id", "")
+        session_id = body.get("session_id", "")
+
+        if not report_text or len(report_text) < 20:
+            raise HTTPException(400, "Report text is too short or empty. OCR may have failed.")
+
+        # Get patient context from session if available
+        name, age, gender, country = "", "", "", ""
+        if user_id and session_id and firebase_mgr:
+            session = firebase_mgr.get_session(user_id, session_id)
+            if session:
+                name = session.patient_name
+                age = session.patient_age
+                gender = session.patient_gender
+                country = session.patient_country
+
+        # RAG retrieval — use report text as query to find relevant medical knowledge
+        rag_results = retriever.retrieve(report_text[:500], top_k_final=5)
+        rag_context = ""
+        if rag_results:
+            parts = []
+            for r in rag_results:
+                d = r.disease
+                entry = f"• {d.disease_name}"
+                if d.symptoms:
+                    entry += f" — Symptoms: {', '.join(d.symptoms[:8])}"
+                if d.treatments:
+                    entry += f" — Treatments: {', '.join(d.treatments[:5])}"
+                if d.red_flags:
+                    entry += f" — Red flags: {', '.join(d.red_flags[:5])}"
+                parts.append(entry)
+            rag_context = "\n".join(parts)
+        else:
+            rag_context = "No specific matches found in knowledge base."
+
+        prompt = REPORT_ANALYSIS_PROMPT.format(
+            system_prompt=REPORT_ANALYSIS_SYSTEM_PROMPT,
+            name=name or "Unknown",
+            age=age or "Unknown",
+            gender=gender or "Unknown",
+            country=country or "Unknown",
+            rag_context=rag_context,
+            report_text=report_text[:4000],  # cap to avoid token overflow
+        )
+
+        # Stream the analysis
+        async def _stream_analysis():
+            try:
+                async for token in llm_client.stream_generate(prompt, system_prompt=""):
+                    yield f"data: {json.dumps({'token': token})}\n\n"
+                    await asyncio.sleep(0.015)
+                yield f"data: {json.dumps({'done': True})}\n\n"
+            except Exception as exc:
+                logger.error("Report analysis stream error: %s", exc, exc_info=True)
+                yield f"data: {json.dumps({'error': str(exc)})}\n\n"
+
+        return StreamingResponse(
+            _stream_analysis(),
+            media_type="text/event-stream",
+            headers={
+                "Cache-Control": "no-cache",
+                "Connection": "keep-alive",
+                "X-Accel-Buffering": "no",
+            },
+        )
+
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logger.error("Report analysis error: %s", exc, exc_info=True)
+        raise HTTPException(status_code=500, detail=str(exc))
+
+
+# ═══════════════════════════════════════════════════════════
 # POST /admin/ingest
 # ═══════════════════════════════════════════════════════════
 

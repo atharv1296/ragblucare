@@ -42,10 +42,10 @@ const About = () => {
 
 						<div className="flex items-end gap-4">
 							<p className="md:text-5xl text-3xl font-bold text-primary">
-								<span className="text-gradient">12k+</span>
+								<span className="text-gradient">120k+</span>
 							</p>
 							<p className="text-xs text-subdued uppercase tracking-widest mb-2">
-								Verified Clinical Cases
+								Verified tokens by WHO
 							</p>
 						</div>
 					</div>

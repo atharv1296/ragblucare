@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BluCare — Medical Assistant</title>
+  <title>Yukti — Medical Assistant</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -209,7 +209,7 @@
 
   <!-- ═══════ Welcome Screen ═══════ -->
   <div id="welcome-screen">
-    <h1>💙 BluCare</h1>
+    <h1> Yukti</h1>
     <p>Your AI Medical Assistant — Tell me your name to get started</p>
     <div class="input-group">
       <input id="name-input" type="text" placeholder="Enter your name…" autocomplete="off" />
@@ -220,9 +220,9 @@
   <!-- ═══════ Chat Screen ═══════ -->
   <div id="chat-screen">
     <div class="chat-header">
-      <div class="avatar">💙</div>
+      <div class="avatar"></div>
       <div class="info">
-        <h2>BluCare Assistant</h2>
+        <h2>Yukti Assistant</h2>
         <span>● Online</span>
       </div>
     </div>
@@ -297,7 +297,7 @@
         `Please describe what you're experiencing — for example:\n` +
         `• "I have a headache and fever since yesterday"\n` +
         `• "My stomach hurts and I feel nauseous"\n\n` +
-        `Take your time — I'm here to help. 💙`
+        `Take your time — I'm here to help. `
       );
 
       msgInput.focus();

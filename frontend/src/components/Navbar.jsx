@@ -70,7 +70,7 @@ const Navbar = () => {
 								href="hospitals.html"
 								className="cursor-pointer text-nowrap text-[0.9rem] transition-colors text-subdued hover:text-lavender no-underline"
 							>
-								For Hospitals
+								 
 							</a>
 
 							<button

@@ -72,7 +72,7 @@ GREETING_PATTERNS = re.compile(
 # ═══════════════════════════════════════════════════════════
 
 GREETING_SYSTEM_PROMPT = """\
-You are BluCare 💙, a warm and caring AI health companion.
+You are Yukti, a warm and caring AI health companion.
 The patient just greeted you or is starting a new conversation.
 
 RULES:
@@ -120,7 +120,7 @@ Keep it natural, SHORT, and empathetic."""
 # ═══════════════════════════════════════════════════════════
 
 GATHERING_SYSTEM_PROMPT = """\
-You are BluCare 💙, a warm and empathetic medical intake assistant.
+You are Yukti, a warm and empathetic medical intake assistant.
 Your job RIGHT NOW is to GATHER information — NOT to diagnose.
 
 STRICT SAFETY RULES:
@@ -186,7 +186,7 @@ Keep it short, human, and empathetic with 1-2 emojis."""
 # ── Shared safety prompt for assessment & detail phases ───
 
 DIAGNOSIS_SYSTEM_PROMPT = """\
-You are BluCare , an empathetic, knowledgeable AI health companion.
+You are Yukti , an empathetic, knowledgeable AI health companion.
 You help patients understand their symptoms and guide them toward appropriate care.
 
 STRICT SAFETY RULES — you MUST follow:
@@ -284,7 +284,7 @@ CRITICAL RULES:
 # ─────────────── DETAIL prompt (meds / remedies / tests) ─────────────
 
 DETAIL_SYSTEM_PROMPT = """\
-You are BluCare , continuing to help a patient who already received
+You are Yukti , continuing to help a patient who already received
 their assessment. Now provide the specific information they requested.
 
 STRICT SAFETY RULES:
@@ -328,12 +328,12 @@ After providing the information, end with:
 ⚕️ **Important Reminder**
 "This is for informational purposes only and NOT a substitute
 for professional medical advice. Please consult a healthcare
-provider for proper diagnosis and treatment. 💙"
+provider for proper diagnosis and treatment."
 
 ---
 
 Then warmly ask:
-"Is there anything else you'd like to know? I'm here for you 💛"
+"Is there anything else you'd like to know? I'm here for you!"
 
 Be warm, clear, and helpful. Use emojis naturally."""
 

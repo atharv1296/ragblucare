@@ -59,7 +59,7 @@ const Contact = () => {
 					<div className="text-center md:text-right">
 						<h4 className="text-subdued uppercase tracking-widest text-xs font-semibold mb-4">Contact</h4>
 						<p className="text-primary font-light">support@ragblucare.ai</p>
-						<p className="text-secondary font-light">+91 98765 43210</p>
+						<p className="text-secondary font-light">+91 9403871129</p>
 					</div>
 				</div>
 

@@ -91,7 +91,7 @@ const Hero = () => {
 					<div className="hero-btn -mt-4 md:-mt-12 z-20">
 						<div className="persistent-btn-glow">
 							<button
-								onClick={() => { window.location.href = import.meta.env.VITE_BACKEND_URL || 'http://127.0.0.1:8000'; }}
+								onClick={() => { window.location.href =  'http://127.0.0.1:8000'; }}
 								className="badge flex items-center justify-center backdrop-blur-md bg-sage/10 border border-sage/20 text-sage px-8 py-3 rounded-full text-sm font-semibold uppercase tracking-widest hover:bg-sage hover:text-bg-base hover:scale-105 transition-all duration-300 transform cursor-pointer"
 							>
 								Begin Gently

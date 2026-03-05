@@ -4,8 +4,8 @@ const navLinks = [
 		title: "New Session",
 	},
 	{
-		id: "Temp Session",
-		title: "Temp Session",
+		id: "temporary Session",
+		title: "temporary Session",
 	},
 	{
 		id: "Journal",

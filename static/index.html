@@ -1086,6 +1086,178 @@
         background-color: var(--border-light);
       }
     }
+
+    /* ─── OCR Report Analyser Modal ─── */
+    .ocr-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(6px);
+      z-index: 500;
+      justify-content: center;
+      align-items: center;
+    }
+    .ocr-modal-overlay.open { display: flex; }
+
+    .ocr-modal {
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: 24px;
+      width: 95%;
+      max-width: 680px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-base);
+      animation: softFadeIn 0.3s ease;
+      overflow: hidden;
+    }
+
+    .ocr-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .ocr-modal-header h3 {
+      font-size: 1.1rem;
+      color: var(--text-primary);
+      font-weight: 600;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .ocr-modal-close {
+      background: transparent; border: none; color: var(--text-subdued);
+      cursor: pointer; font-size: 1.4rem; line-height: 1; padding: 4px 8px;
+      border-radius: 8px; transition: all 0.2s;
+    }
+    .ocr-modal-close:hover { background: var(--border-light); color: var(--text-primary); }
+
+    .ocr-modal-body {
+      padding: 24px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .ocr-dropzone {
+      border: 2px dashed var(--border-light);
+      border-radius: 16px;
+      padding: 40px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+    }
+    .ocr-dropzone:hover, .ocr-dropzone.dragover {
+      border-color: var(--accent-sage);
+      background: rgba(127,225,195,0.04);
+    }
+    .ocr-dropzone svg { margin-bottom: 12px; color: var(--text-subdued); }
+    .ocr-dropzone p { color: var(--text-subdued); font-size: 0.9rem; margin-top: 4px; }
+    .ocr-dropzone .ocr-formats { font-size: 0.75rem; color: var(--text-subdued); margin-top: 8px; }
+    .ocr-dropzone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+
+    .ocr-preview {
+      display: none;
+      margin-top: 16px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-light);
+      max-height: 200px;
+      position:relative;
+    }
+    .ocr-preview img { width: 100%; object-fit: contain; max-height: 200px; display: block; }
+    .ocr-preview .ocr-remove {
+      position: absolute; top: 8px; right: 8px;
+      background: rgba(0,0,0,0.6); color: #fff; border: none;
+      border-radius: 50%; width: 28px; height: 28px;
+      cursor: pointer; font-size: 1rem; display: flex;
+      align-items: center; justify-content: center;
+    }
+
+    .ocr-progress {
+      display: none;
+      margin-top: 16px;
+    }
+    .ocr-progress-bar {
+      height: 6px;
+      background: var(--bg-surface);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .ocr-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent-sage), var(--accent-aqua));
+      border-radius: 3px;
+      transition: width 0.3s;
+    }
+    .ocr-progress-text {
+      font-size: 0.8rem;
+      color: var(--text-subdued);
+      margin-top: 6px;
+      text-align: center;
+    }
+
+    .ocr-result {
+      display: none;
+      margin-top: 16px;
+      background: var(--bg-surface);
+      border-radius: 16px;
+      border: 1px solid var(--border-light);
+      overflow: hidden;
+    }
+    .ocr-result-header {
+      padding: 12px 16px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--accent-sage);
+      border-bottom: 1px solid var(--border-light);
+    }
+    .ocr-result-body {
+      padding: 16px;
+      max-height: 300px;
+      overflow-y: auto;
+      line-height: 1.7;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+    }
+    .ocr-result-body strong { color: var(--accent-lavender); }
+    .ocr-result-body h1, .ocr-result-body h2, .ocr-result-body h3 {
+      color: var(--accent-lavender); margin: 0.8rem 0 0.4rem; font-size: 1.05em;
+    }
+    .ocr-result-body hr { border: none; border-top: 1px solid var(--border-light); margin: 1rem 0; }
+    .ocr-result-body ul { padding-left: 1.5rem; }
+    .ocr-result-body li { margin: 0.25rem 0; }
+
+    .ocr-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+    .ocr-btn {
+      padding: 10px 20px;
+      border-radius: 12px;
+      border: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .ocr-btn:hover { transform: scale(1.02); }
+    .ocr-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .ocr-btn-primary {
+      background: linear-gradient(135deg, var(--accent-sage), var(--accent-aqua));
+      color: #111;
+    }
+    .ocr-btn-secondary {
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      border: 1px solid var(--border-light);
+    }
   </style>
 </head>
 
@@ -1093,7 +1265,10 @@
 
   <!-- Auth Screen (from index2 with generic new UI styling applied via class/ids) -->
   <div id="auth-screen">
-    <h1>BluCare+</h1>
+    <!-- <h1>BluCare+</h1> -->
+     <a href="http://10.184.10.48:5173/" style="text-decoration: none; color: inherit;">
+    <h1 style="cursor: pointer;">BluCare+</h1>
+</a>
     <p>A safe, private space for your health journey.</p>
     <div class="auth-tabs">
       <button class="auth-tab active" id="login-tab" onclick="switchAuthTab('login')">Login</button>
@@ -1131,22 +1306,26 @@
           </svg>
         </button>
         <div class="nav-links" id="navLinks">
-          <a id="sessions-link" href="/my-sessions">Sessions</a>
+         
           <a id="new-session-header-btn" onclick="startNewSession();closeSidebar()">New Session</a>
-          <a id="temp-session-header-btn" onclick="startTempSession();closeSidebar()">Temp Session</a>
-          <a class="ambulance-header-btn" href="/nearby-ambulance">Ambulance</a>
-          <a href="https://thiago-lathy-smarmily.ngrok-free.dev" target="_blank" rel="noopener">Interactive Yukti</a>
+          <a id="analyse-report-btn" onclick="openOcrModal();closeSidebar()" style="cursor:pointer;">Analyse Report</a>
+          <a id="temp-session-header-btn" onclick="startTempSession();closeSidebar()">Temporary Session</a>
+           <a id="sessions-link" href="/my-sessions">Journal</a>
+          <a href="http://192.168.1.112:3001/" target="_blank" rel="noopener">Interactive Yukti</a>
+                    <a class="ambulance-header-btn" href="/nearby-ambulance">Ambulance</a>
+
           <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
             <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
               stroke-linecap="round" stroke-linejoin="round"></svg>
           </button>
-          <!-- Logout button matching chat.html style -->
-          <a onclick="doLogout();closeSidebar()" style="color:var(--status-risk);cursor:pointer;">Logout</a>
-        </div>
-        <div class="user-profile">
+          <div class="user-profile">
           <div class="user-avatar" id="userAvatar">U</div>
           <div class="user-name" id="userNameLabel">Hi, User</div>
         </div>
+          <!-- Logout button matching chat.html style -->
+          <a onclick="doLogout();closeSidebar()" style="color:var(--status-risk);cursor:pointer;">Logout</a>
+        </div>
+        
       </div>
     </nav>
 
@@ -1159,7 +1338,7 @@
 
       <!-- Typing indicator rests here -->
       <div class="message ai-message typing-indicator" id="typing" style="display:none; padding-left: 20px;">
-        <div class="speaker-label">Yukti+</div>
+        <div class="speaker-label">Yukti</div>
         <div class="ai-bubble" style="padding: 16px 28px; width: fit-content;">
           <br />
           <div class="dot-flashing"></div>
@@ -1171,17 +1350,17 @@
         <div class="input-glow" id="inputGlow">
           <div class="input-wrapper">
             <!-- Upload button visual mock from chat.html -->
-            <button class="upload-btn" id="uploadBtn" title="Attach file">
+            <!-- <button class="upload-btn" id="uploadBtn" title="Attach file">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                 stroke-linecap="round" stroke-linejoin="round">
                 <line x1="12" y1="5" x2="12" y2="19"></line>
                 <line x1="5" y1="12" x2="19" y2="12"></line>
               </svg>
-            </button>
+            </button> -->
             <div class="input-core">
               <textarea id="msg-input" placeholder="Message BluCare..." rows="1"></textarea>
             </div>
-            <div class="actions-container">
+            <!-- <div class="actions-container">
               <button class="mic-btn" title="Voice Assistant">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
                   stroke-linecap="round" stroke-linejoin="round">
@@ -1189,7 +1368,7 @@
                   <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
                   <line x1="12" y1="19" x2="12" y2="22"></line>
                 </svg>
-              </button>
+              </button> -->
               <!-- Send button uses required ID -->
               <button class="send-btn" id="send-btn" onclick="sendMessage()" title="Send Message">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
@@ -1201,10 +1380,59 @@
             </div>
           </div>
         </div>
-        <p class="footer-note">A safe, private space for your health journey.</p>
+        <!-- <p class="footer-note">A safe, private space for your health journey.</p> -->
       </section>
     </div>
   </div>
+
+  <!-- OCR Report Analyser Modal -->
+  <div class="ocr-modal-overlay" id="ocrModalOverlay">
+    <div class="ocr-modal">
+      <div class="ocr-modal-header">
+        <h3>🔬 Analyse Medical Report</h3>
+        <button class="ocr-modal-close" onclick="closeOcrModal()">&times;</button>
+      </div>
+      <div class="ocr-modal-body">
+        <div class="ocr-dropzone" id="ocrDropzone">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+          <p><strong>Drop your report here</strong> or click to browse</p>
+          <p class="ocr-formats">Supports: PNG, JPG, JPEG, GIF, BMP, WEBP</p>
+          <input type="file" id="ocrFileInput" accept="image/*" onchange="handleOcrFile(this.files[0])" />
+        </div>
+
+        <div class="ocr-preview" id="ocrPreview">
+          <img id="ocrPreviewImg" src="" alt="Preview" />
+          <button class="ocr-remove" onclick="resetOcr()">&times;</button>
+        </div>
+
+        <div class="ocr-progress" id="ocrProgress">
+          <div class="ocr-progress-bar"><div class="ocr-progress-fill" id="ocrProgressFill"></div></div>
+          <p class="ocr-progress-text" id="ocrProgressText">Initializing OCR engine...</p>
+        </div>
+
+        <div class="ocr-actions" id="ocrActions" style="display:none;">
+          <button class="ocr-btn ocr-btn-primary" id="ocrAnalyseBtn" onclick="runAnalysis()" disabled>
+            🧠 Analyse with AI
+          </button>
+          <button class="ocr-btn ocr-btn-secondary" onclick="resetOcr()">
+            🔄 Upload Another
+          </button>
+        </div>
+
+        <div class="ocr-result" id="ocrResult">
+          <div class="ocr-result-header" id="ocrResultHeader">📊 AI Analysis</div>
+          <div class="ocr-result-body" id="ocrResultBody"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tesseract.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 
   <!-- The original JS Logic with injected rules-based replacements -->
   <script>
@@ -1690,7 +1918,7 @@
 
       const label = document.createElement("div");
       label.className = "speaker-label";
-      label.textContent = role === "bot" ? "BluCare+" : (userName || "You");
+      label.textContent = role === "bot" ? "Yukti" : (userName || "You");
       el.appendChild(label);
 
       const bubble = document.createElement("div");
@@ -1790,7 +2018,45 @@
         const bookBtn = document.createElement('button');
         bookBtn.className = 'book-appointment-btn';
         bookBtn.textContent = 'Book Appointment';
-        bookBtn.onclick = function() { /* intentionally empty for now */ };
+        bookBtn.onclick = async function () {
+  const data = {
+    location: "https://maps.app.goo.gl/4edjXrRfTasmwxWR6",
+    patient_name: "Prashik Fadtare",
+    age: "20",
+    symptoms: "High fever",
+    hospitalPhone: "+919518995696"
+  };
+
+  try {
+    bookBtn.disabled = true;
+    bookBtn.textContent = "Booking...";
+
+    const response = await fetch(
+      "https://leandro-humoursome-violinistically.ngrok-free.dev/api/appointments/book-from-location",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to book appointment");
+    }
+
+    const result = await response.json();
+    console.log("Success:", result);
+
+    bookBtn.textContent = "Wait For Call Confirmation 📞";
+  } catch (error) {
+    console.error("Error:", error);
+    bookBtn.textContent = "Booking Failed ❌";
+  } finally {
+    bookBtn.disabled = false;
+  }
+};
         footer.appendChild(bookBtn);
         wrap.appendChild(footer);
         messagesEl.appendChild(wrap);
@@ -1881,6 +2147,178 @@
       html = html.replace(/<\/ul><br>/g, "</ul>");
       return html;
     }
+
+    // ═══════════════════════════════════════════════════════
+    // OCR Report Analyser
+    // ═══════════════════════════════════════════════════════
+    let ocrExtractedText = "";
+
+    function openOcrModal() {
+      document.getElementById('ocrModalOverlay').classList.add('open');
+    }
+
+    function closeOcrModal() {
+      document.getElementById('ocrModalOverlay').classList.remove('open');
+    }
+
+    function resetOcr() {
+      ocrExtractedText = "";
+      document.getElementById('ocrPreview').style.display = 'none';
+      document.getElementById('ocrProgress').style.display = 'none';
+      document.getElementById('ocrActions').style.display = 'none';
+      document.getElementById('ocrResult').style.display = 'none';
+      document.getElementById('ocrDropzone').style.display = 'block';
+      document.getElementById('ocrFileInput').value = '';
+      document.getElementById('ocrAnalyseBtn').disabled = true;
+      document.getElementById('ocrResultBody').innerHTML = '';
+      document.getElementById('ocrProgressFill').style.width = '0%';
+    }
+
+    // Drag-and-drop support
+    const dropzone = document.getElementById('ocrDropzone');
+    if (dropzone) {
+      dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('dragover'); });
+      dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+      dropzone.addEventListener('drop', e => {
+        e.preventDefault();
+        dropzone.classList.remove('dragover');
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith('image/')) handleOcrFile(file);
+      });
+    }
+
+    async function handleOcrFile(file) {
+      if (!file || !file.type.startsWith('image/')) {
+        alert('Please upload an image file (PNG, JPG, etc.).');
+        return;
+      }
+
+      // Show preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        document.getElementById('ocrPreviewImg').src = e.target.result;
+        document.getElementById('ocrPreview').style.display = 'block';
+        document.getElementById('ocrDropzone').style.display = 'none';
+      };
+      reader.readAsDataURL(file);
+
+      // Run Tesseract.js OCR
+      document.getElementById('ocrProgress').style.display = 'block';
+      document.getElementById('ocrActions').style.display = 'none';
+      document.getElementById('ocrResult').style.display = 'none';
+      ocrExtractedText = '';
+
+      try {
+        const result = await Tesseract.recognize(file, 'eng', {
+          logger: m => {
+            if (m.status === 'recognizing text') {
+              const pct = Math.round((m.progress || 0) * 100);
+              document.getElementById('ocrProgressFill').style.width = pct + '%';
+              document.getElementById('ocrProgressText').textContent = `Recognizing text... ${pct}%`;
+            } else {
+              document.getElementById('ocrProgressText').textContent = m.status || 'Processing...';
+            }
+          }
+        });
+
+        ocrExtractedText = (result.data.text || '').trim();
+        document.getElementById('ocrProgressFill').style.width = '100%';
+
+        if (ocrExtractedText.length < 10) {
+          document.getElementById('ocrProgressText').textContent = '⚠️ Could not extract meaningful text. Try a clearer image.';
+          document.getElementById('ocrActions').style.display = 'flex';
+          document.getElementById('ocrAnalyseBtn').disabled = true;
+        } else {
+          document.getElementById('ocrProgressText').textContent =
+            `✅ Extracted ${ocrExtractedText.length} characters. Ready to analyse!`;
+          document.getElementById('ocrActions').style.display = 'flex';
+          document.getElementById('ocrAnalyseBtn').disabled = false;
+        }
+      } catch (err) {
+        console.error('OCR error:', err);
+        document.getElementById('ocrProgressText').textContent = '❌ OCR failed: ' + err.message;
+        document.getElementById('ocrActions').style.display = 'flex';
+      }
+    }
+
+    async function runAnalysis() {
+      if (!ocrExtractedText) return;
+
+      const btn = document.getElementById('ocrAnalyseBtn');
+      btn.disabled = true;
+      btn.innerHTML = '🧠 Analysing...';
+
+      const resultEl = document.getElementById('ocrResult');
+      const bodyEl = document.getElementById('ocrResultBody');
+      resultEl.style.display = 'block';
+      bodyEl.innerHTML = '<p style="color:var(--text-subdued);">Connecting to AI engine...</p>';
+
+      try {
+        const res = await fetch(`${API}/analyse-report`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            report_text: ocrExtractedText,
+            user_id: userId,
+            session_id: sessionId,
+          }),
+        });
+
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.detail || `HTTP ${res.status}`);
+        }
+
+        // Stream the response
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let fullText = '';
+        bodyEl.innerHTML = '';
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          const chunk = decoder.decode(value, { stream: true });
+          const lines = chunk.split('\n');
+
+          for (const line of lines) {
+            if (!line.startsWith('data: ')) continue;
+            const payload = line.slice(6).trim();
+            if (!payload) continue;
+
+            try {
+              const data = JSON.parse(payload);
+              if (data.error) {
+                bodyEl.innerHTML += `<p style="color:var(--status-risk);">Error: ${escapeHtml(data.error)}</p>`;
+                break;
+              }
+              if (data.token) {
+                fullText += data.token;
+                bodyEl.innerHTML = renderMarkdown(fullText);
+                bodyEl.scrollTop = bodyEl.scrollHeight;
+              }
+            } catch (_) { /* skip */ }
+          }
+        }
+
+        if (!fullText) {
+          bodyEl.innerHTML = '<p style="color:var(--text-subdued);">No analysis received. Please try again.</p>';
+        }
+
+      } catch (err) {
+        console.error('Analysis error:', err);
+        bodyEl.innerHTML = `<p style="color:var(--status-risk);">Analysis failed: ${escapeHtml(err.message)}</p>`;
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '🧠 Analyse with AI';
+      }
+    }
+
+    // Close modal on overlay click
+    document.getElementById('ocrModalOverlay').addEventListener('click', function(e) {
+      if (e.target === this) closeOcrModal();
+    });
 
   </script>
 </body>
